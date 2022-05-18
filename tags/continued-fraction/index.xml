@@ -1,0 +1,131 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Continued Fraction - 标签 - yolande 的博客</title>
+        <link>https://y01and3.github.io/tags/continued-fraction/</link>
+        <description>Continued Fraction - 标签 - yolande 的博客</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 16 May 2022 22:45:46 &#43;0800</lastBuildDate><atom:link href="https://y01and3.github.io/tags/continued-fraction/" rel="self" type="application/rss+xml" /><item>
+    <title>Wiener Attack Note</title>
+    <link>https://y01and3.github.io/wieners_attack_note/</link>
+    <pubDate>Mon, 16 May 2022 22:45:46 &#43;0800</pubDate>
+    <author>yolande</author>
+    <guid>https://y01and3.github.io/wieners_attack_note/</guid>
+    <description><![CDATA[<h1 id="wiener-attack-笔记">Wiener Attack 笔记</h1>
+<h2 id="连分数">连分数</h2>
+<h3 id="连分数形式">连分数形式</h3>
+<data id="id-1" data-raw></data>
+<p>令 <data id="id-2" data-raw></data> .</p>
+<data id="id-3" data-raw></data>
+<h3 id="将有理数转换为连分数">将有理数转换为连分数</h3>
+<data id="id-4" data-raw></data>
+<p>直到 <data id="id-5" data-raw></data> .</p>
+<p>通过观察可以得到：</p>
+<ol>
+<li>
+<data id="id-6" data-raw></data>
+</li>
+<li>
+<data id="id-7" data-raw></data>
+</li>
+</ol>
+<h3 id="将连分数转换为有理数">将连分数转换为有理数</h3>
+<data id="id-8" data-raw></data>
+<p>可以从中得到下面的关系：</p>
+<data id="id-9" data-raw></data>
+<h2 id="连分数算法">连分数算法</h2>
+<p><data id="id-10" data-raw></data> 是 $f$ 的一个较小的估计值。</p>
+<p>如果 $\delta$ 足够小，那么 $f$ 的分子和分母可以通过下面的方式找到：</p>
+<ol>
+<li>
+<data id="id-11" data-raw></data>
+</li>
+<li>
+<data id="id-12" data-raw></data>
+</li>
+<li>
+<p>测试 $f=\frac{n_i}{d_i}$ 是否成立.</p>
+</li>
+</ol>
+<h3 id="成功条件">成功条件</h3>
+<data id="id-13" data-raw></data>
+<p>对于 $\delta$ 大小的影响：</p>
+<p>$\delta =1-\frac{f^{\prime}}{f}$ .</p>
+<p>根据 $m$ 的大小分为四种情况：</p>
+<ol>
+<li>$m=0$ :</li>
+</ol>
+<data id="id-14" data-raw></data>
+<ol start="2">
+<li>$m=1$ :</li>
+</ol>
+<data id="id-15" data-raw></data>
+<ol start="3">
+<li>$m$ 是偶数且 $m\geq2$ :</li>
+</ol>
+<data id="id-16" data-raw></data>
+<ol start="4">
+<li>$m$ 是奇数且 $m\geq3$ :</li>
+</ol>
+<data id="id-17" data-raw></data>
+<h2 id="连分数算法在-rsa-的使用">连分数算法在 RSA 的使用</h2>
+<data id="id-18" data-raw></data>
+<p>令 $G=GCD(p-1,q-1)$ .</p>
+<p>$$ ed=\frac{K}{G}\cdot (p-1)(q-1)+1 $$</p>
+<p>令 <data id="id-19" data-raw></data> .</p>
+<data id="id-20" data-raw></data>
+<p>测试猜想的 $k$, $dg$ 是否正确：</p>
+<p>假设 $ed&gt;N$ ，那么 $k&gt;g$ .</p>
+<data id="id-21" data-raw></data>
+<p>$\frac{N-(p-1)(q-1)+1}{2}=\frac{p+q}{2}$ ，如果 $(p-1)(q-1)$ 为 0 或是奇数，那么猜想错误。</p>
+<p>$\big(\frac{p+q}{2}\big)^2-N=\big(\frac{p-q}{2}\big)^2$ ，如果 $\big(\frac{p-q}{2}\big)^2$ 是完全平方数，那么猜想正确。</p>
+<data id="id-22" data-raw></data>
+<p>在没有防止连分数攻击的情况下，可以期望 $g$ 比较小， $k&lt;dg$ 。在这种情况下 $d$ 的位数约为 $N$ 的 $\frac 1 4$ ，在多项式时间内可以找到这样的 $d$ 。</p>
+<h2 id="流程">流程</h2>
+<ol>
+<li>计算 <data id="id-23" data-raw></data></li>
+<li>猜测 $\frac{k}{dg}$</li>
+<li>猜测 $edg = e\cdot dg$</li>
+<li>猜测 $(p-1)(q-1)=\lfloor \frac{edg}{k} \rfloor$</li>
+<li>猜测 $g\equiv edg\pmod k$</li>
+<li>猜测 $\frac{p+q}{2}$</li>
+<li>猜测 $\big(\frac{p-q}{2}\big)^2$</li>
+<li>计算 $d$</li>
+</ol>
+<p>一轮中止之后，开始新的一轮，直到得到 $d$ 。</p>
+<h2 id="防止连分数攻击">防止连分数攻击</h2>
+<ol>
+<li>
+<p>增大 $k$ 。必须增大 $e$ ，可以通过给 $e$ 增加 $LCM(p-1,q-1)$ 的倍数实现。 $e&gt;(pq)^{\frac{3}{2}}$ 时，无法进行连分数攻击。</p>
+</li>
+<li>
+<p>增大 $g$ 。增大 $GCD(p-1,q-1)$ ，但是在特定条件下可以找到 $g$ 或 $g$ 的因数。</p>
+</li>
+</ol>
+<h2 id="改进">改进</h2>
+<ol>
+<li>
+<p>允许寻找 $d$ 的时候略微超过 $kdg&lt;\frac{N}{\frac 3 2(p+q)}$ .</p>
+</li>
+<li>
+<p>使用对 $(p-1)(q-1)$ 更加接近的估计替换 $N$ :</p>
+</li>
+</ol>
+<p>可以使用 $\lfloor (\sqrt N-1)^2\rfloor$ ，那么 $kdg&lt;\frac 2 3\big(\frac{\sqrt N-1}{\sqrt p-\sqrt q}\big)^2$ .</p>
+<ol start="3">
+<li>
+<p>在多个 $\frac{k}{dg}$ 的猜想上使用算法。（？）</p>
+</li>
+<li>
+<p>试图寻找 $g$ 或 $g$ 的因数：</p>
+</li>
+</ol>
+<p>假设 $t$ 是 $g$ 的一个未知的因数。</p>
+<p>$t\big(\frac{e}{N} \big)$ 是 $\frac{k}{d(\frac{g}{t})}$ 的一个较小的估计。</p>
+<data id="id-24" data-raw></data>
+<p>如果 $g$ 或 $g$ 的所有质因数很大，那么将难以计算 $g$ 的因数。然而， $g$ 过大将导致 $\frac{p-1}{g}$ 和 $\frac{q-1}{g}$ 很小，可以通过查找 $\frac{p-1}{g}$ 和 $\frac{q-1}{g}$ 来寻找 $g$ 的可能值。</p>
+<h2 id="一些废话">一些废话</h2>
+<p>这篇论文还比较容易看懂，至少对于我来说比网上写的总结好懂一些。</p>
+<p>因为翻译水平比较一般，所以可能会有一股机翻味（？）。</p>
+]]></description>
+</item>
+</channel>
+</rss>

